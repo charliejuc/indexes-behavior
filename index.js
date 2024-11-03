@@ -2,9 +2,9 @@ import { faker } from "@faker-js/faker";
 
 // It is and example of the behavior of a simple database index to show the performance issues
 
-const categoriesLength = 5;
+const categoriesLength = 3;
 const transactionsLength = 20;
-const daysRange = 5;
+const daysRange = 3;
 
 const categoriesIds = Array.from({ length: categoriesLength }, () =>
   faker.string.uuid()
@@ -14,7 +14,7 @@ const sumDays = (date, offset) => {
   newDate.setDate(newDate.getDate() + offset);
   return newDate;
 };
-const generateTransaction = () => {
+const generateTransaction = (options) => {
   const randomDate = () =>
     faker.date.between({
       from: sumDays(new Date(), daysRange * -1),
@@ -23,23 +23,25 @@ const generateTransaction = () => {
 
   return {
     id: faker.string.uuid(),
-    amount: Number(
-      faker.finance.amount({
-        min: 0,
-        max: 5,
-      })
-    ),
-    date: randomDate(),
-    visible: faker.datatype.boolean(),
-    categoryId: faker.helpers.arrayElement(categoriesIds),
-    updatedAt: randomDate(),
-    createdAt: randomDate(),
+    amount:
+      options?.amount ??
+      Number(
+        faker.finance.amount({
+          min: 0,
+          max: 3,
+        })
+      ),
+    date: options?.date ?? randomDate(),
+    visible: options?.visible ?? faker.datatype.boolean(),
+    categoryId:
+      options?.categoryId ?? faker.helpers.arrayElement(categoriesIds),
+    updatedAt: options?.updatedAt ?? randomDate(),
+    createdAt: options?.createdAt ?? randomDate(),
   };
 };
 
-const transactions = Array.from(
-  { length: transactionsLength },
-  generateTransaction
+const transactions = Array.from({ length: transactionsLength }, () =>
+  generateTransaction({})
 );
 
 const parseValueByType = (value) => {
