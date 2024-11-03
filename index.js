@@ -1,7 +1,5 @@
 import { faker } from "@faker-js/faker";
 
-// It is and example of the behavior of a simple database index to show the performance issues
-
 const categoriesLength = 3;
 const transactionsLength = 20;
 const daysRange = 3;
